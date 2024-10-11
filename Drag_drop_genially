@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and Drop</title>
+  <style>
+    #drag1 {
+      width: 100px;
+      height: 100px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      line-height: 100px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #dropzone {
+      width: 200px;
+      height: 200px;
+      border: 2px dashed #000;
+      display: inline-block;
+      margin: 10px;
+      text-align: center;
+      line-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align: center;">Glissez et déposez l'objet dans la zone</h2>
+  <div id="drag1" draggable="true" ondragstart="drag(event)">
+    Objet à déplacer
+  </div>
+  <div id="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)">
+    Zone de dépôt
+  </div>
+
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text/plain", event.target.id);
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData("text/plain");
+      var element = document.getElementById(data);
+
+      if (event.target.id === "dropzone" && !event.target.contains(element)) {
+        event.target.appendChild(element);
+        event.target.style.border = "2px solid green";
+        event.target.innerHTML = "Bravo, vous avez déposé l'objet !";
+      }
+    }
+  </script>
+</body>
+</html>
