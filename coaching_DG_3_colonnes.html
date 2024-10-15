@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -61,6 +61,20 @@
             display: block;
             margin-top: 20px;
         }
+        .styled-button {
+            background-color: #ff6f61; /* Rouge orangé */
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .styled-button:hover {
+            background-color: #ff5a4f; /* Plus foncé au survol */
+        }
         .message {
             margin-top: 20px;
             font-size: 18px;
@@ -84,7 +98,7 @@
     <!-- Explication de l'exercice -->
     <h2>Exercice :</h2>
     <p>
-        Classez les mots ci-dessous sur les différentes blocs-notes en fonction de leur catégorie.
+        Classez les mots ci-dessous sur les différentes blocs-notes en fonction de leur catégorie. 
         Vous devrez également classer les 3 catégories de rôle en vous aidant des deux indices déjà repris sur les blocs-notes.
     </p>
 
@@ -101,9 +115,9 @@
         </div>
     </div>
 
-    <!-- Pot commun pour les mots -->
+    <!-- Pot commun pour les mots remplacé par un bouton stylé -->
     <div id="common-pot" class="word-list">
-        <h3>Pot commun</h3>
+        <button class="styled-button" onclick="showWords()">Voir les mots du Pot Commun</button>
         <div id="words">
             <!-- Les mots seront ajoutés ici dynamiquement -->
         </div>
@@ -120,9 +134,10 @@
             "feedback": ["Rassurer", "Ecouter", "Leadership", "Montrer de l'empathie", "Motiver", "Guider", "Inspirer", "Encourager"]
         };
 
-        // Fonction pour initialiser les mots dans le pot commun
-        function createWords() {
+        // Fonction pour afficher les mots quand on clique sur le bouton
+        function showWords() {
             const wordContainer = document.getElementById("words");
+            wordContainer.innerHTML = "";  // Vider le conteneur avant d'ajouter les mots
             let allWords = [...words.organiser, ...words.coacher, ...words.feedback];
             allWords.forEach((word, index) => {
                 let wordElement = document.createElement("div");
@@ -182,9 +197,6 @@
             });
             return correct;
         }
-
-        // Initialisation
-        createWords();
     </script>
 
 </body>
