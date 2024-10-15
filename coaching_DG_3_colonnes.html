@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diriger des agents locaux - Exercice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #d00;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 20px 0;
+        }
+        .logo {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        .column {
+            float: left;
+            width: 30%;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 300px;
+            background-color: #fff;
+        }
+        .word-list {
+            margin: 10px;
+        }
+        .word {
+            cursor: pointer;
+            padding: 5px;
+            background-color: #f0f0f0;
+            margin: 5px;
+            display: inline-block;
+        }
+        .correct {
+            background-color: #a3d3a2;
+        }
+        .incorrect {
+            background-color: #f3a4a4;
+        }
+        .button {
+            display: block;
+            margin-top: 20px;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Banniere Section -->
+    <img src="https://media.licdn.com/dms/image/v2/D4E3DAQGVHNk5Ucbtug/image-scale_191_1128/image-scale_191_1128/0/1698929875240/dgconnect_vandenbroele_cover?e=2147483647&v=beta&t=hssu--iafJMrYygoO8DjA6lJCBo7BY8UopJGMi3ai_Q" alt="DGConnect Banner" class="logo">
+
+    <!-- Title -->
+    <h1>Diriger des agents locaux</h1>
+
+    <!-- Explication de l'exercice -->
+    <h2>Exercice :</h2>
+    <p>
+        Classez les mots ci-dessous sur les différentes blocs-notes en fonction de leur catégorie.
+        Vous devrez également classer les 3 catégories de rôle en vous aidant des deux indices déjà repris sur les blocs-notes.
+    </p>
+
+    <!-- Colonne pour organiser les mots -->
+    <div class="clearfix">
+        <div class="column" id="organiser" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>Organiser</h3>
+        </div>
+        <div class="column" id="coacher" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>Coacher</h3>
+        </div>
+        <div class="column" id="feedback" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h3>Donner du Feedback</h3>
+        </div>
+    </div>
+
+    <!-- Pot commun pour les mots -->
+    <div id="common-pot" class="word-list">
+        <h3>Pot commun</h3>
+        <div id="words">
+            <!-- Les mots seront ajoutés ici dynamiquement -->
+        </div>
+    </div>
+
+    <button class="button" onclick="checkAnswers()">Vérifier</button>
+    <div class="message" id="result-message"></div>
+
+    <script>
+        // Mots associés aux colonnes
+        const words = {
+            "organiser": ["Evaluer", "Former", "Recruter", "Planifier", "Licencier", "Sanctionner", "Management", "Déléguer", "Fixer des objectifs"],
+            "coacher": ["Coaching", "Faire réfléchir"],
+            "feedback": ["Rassurer", "Ecouter", "Leadership", "Montrer de l'empathie", "Motiver", "Guider", "Inspirer", "Encourager"]
+        };
+
+        // Fonction pour initialiser les mots dans le pot commun
+        function createWords() {
+            const wordContainer = document.getElementById("words");
+            let allWords = [...words.organiser, ...words.coacher, ...words.feedback];
+            allWords.forEach((word, index) => {
+                let wordElement = document.createElement("div");
+                wordElement.className = "word";
+                wordElement.id = `word-${index}`; // ID unique
+                wordElement.textContent = word;
+                wordElement.draggable = true;
+                wordElement.addEventListener('dragstart', drag);
+                wordContainer.appendChild(wordElement);
+            });
+        }
+
+        // Permet le drag and drop
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            let wordId = event.dataTransfer.getData("text");
+            let wordElement = document.getElementById(wordId);
+            event.target.appendChild(wordElement);
+        }
+
+        // Fonction pour vérifier les réponses
+        function checkAnswers() {
+            const organiserColumn = document.getElementById("organiser").querySelectorAll(".word");
+            const coacherColumn = document.getElementById("coacher").querySelectorAll(".word");
+            const feedbackColumn = document.getElementById("feedback").querySelectorAll(".word");
+
+            let correctCount = 0;
+            correctCount += checkColumn(organiserColumn, words.organiser);
+            correctCount += checkColumn(coacherColumn, words.coacher);
+            correctCount += checkColumn(feedbackColumn, words.feedback);
+
+            if (correctCount === Object.values(words).flat().length) {
+                document.getElementById("result-message").textContent = "Super ! Bonnes réponses !";
+            } else {
+                document.getElementById("result-message").textContent = "Certains mots sont encore incorrects.";
+            }
+        }
+
+        function checkColumn(columnElements, correctWords) {
+            let correct = 0;
+            columnElements.forEach(element => {
+                if (correctWords.includes(element.textContent)) {
+                    element.classList.add("correct");
+                    correct++;
+                } else {
+                    element.classList.add("incorrect");
+                    document.getElementById("words").appendChild(element);
+                }
+            });
+            return correct;
+        }
+
+        // Initialisation
+        createWords();
+    </script>
+
+</body>
+</html>
