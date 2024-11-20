@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur - Effectif - Travail de première ligne des CPAS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            color: #CC2F2B;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .container {
+            flex: 1;
+            margin: 10px;
+            border: 1px solid #CC2F2B;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1, .container h2, .container h3 {
+            color: #CC2F2B;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #CC2F2B;
+            margin-top: 5px;
+            outline: none;
+        }
+
+        button {
+            background-color: #CC2F2B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #b22725;
+        }
+
+        .accordion {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #CC2F2B;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+            outline: none;
+            transition: background-color 0.3s;
+        }
+
+        .accordion:hover {
+            background-color: #b22725;
+        }
+
+        .panel {
+            padding: 0 10px;
+            display: none;
+            background-color: #fff5f5;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .panel.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Calculateur - Effectif pour le travail de première ligne des CPAS</div>
+
+    <div class="main-container">
+        <!-- Colonne pour les informations à encoder -->
+        <div class="container form-section">
+            <h1>Informations à encoder</h1>
+            <label>
+                Nombre d'habitants :
+                <input type="number" id="habitants" required>
+            </label>
+            <label>
+                Nombre de dossiers RI :
+                <input type="number" id="dossiersRI" required>
+            </label>
+            <label>
+                Nombre de dossiers ERI :
+                <input type="number" id="dossiersERI" required>
+            </label>
+            <label>
+                Nombre d'assistants sociaux (AS) :
+                <input type="number" id="nbAS" required>
+            </label>
+        </div>
+
+        <!-- Colonne pour les cases à cocher -->
+        <div class="container form-section">
+            <h2>Services à sélectionner</h2>
+            <h3>Services de base non proposés :</h3>
+            <div class="service">
+                <label><input type="checkbox" class="serviceBase" data-service="encodage"> Encodage</label>
+                <label><input type="checkbox" class="serviceBase" data-service="etudiants"> Etudiants</label>
+                <label><input type="checkbox" class="serviceBase" data-service="debiteurs"> Débiteurs aliments</label>
+                <label><input type="checkbox" class="serviceBase" data-service="contacts"> Contacts organisme</label>
+                <label><input type="checkbox" class="serviceBase" data-service="adresses"> Adresses de référence</label>
+            </div>
+
+            <h3>Services complémentaires proposés :</h3>
+            <div class="service">
+                <label><input type="checkbox" class="serviceComplementaire" data-service="logement" id="logementCheckbox" onchange="toggleLogementInput()"> Service lié au logement</label>
+                <input type="number" id="logementInput" placeholder="Nombre de logements" style="display: none; margin-top: 5px;">
+
+                <label><input type="checkbox" class="serviceComplementaire" data-service="ila" id="ilaCheckbox" onchange="toggleILAInput()"> Service ILA</label>
+                <input type="number" id="ilaInput" placeholder="Nombre de personnes" style="display: none; margin-top: 5px;">
+
+                <label><input type="checkbox" class="serviceComplementaire" data-service="mediation"> Médiation familiale</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="insertion"> Insertion professionnelle</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="ins_sociale"> Insertion sociale</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="impot"> Feuilles d'impôt</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="energie"> Energie et allocation chauffage</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="projets_jeunes"> Projets jeunes</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="projets_culture"> Projets culture</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="deliberations"> Gestion des délibérations</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="courrier"> Gestion du courrier</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="gestion"> Compte de gestion</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="guidance"> Guidance budgétaire</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="piis"> PIIS</label>
+                <label><input type="checkbox" class="serviceComplementaire" data-service="handicap"> Handicap</label>
+            </div>
+        </div>
+
+        <!-- Colonne pour les résultats -->
+        <div class="container">
+            <h2>Résultats</h2>
+            <p><strong>Catégorie de CPAS :</strong> <span id="typeCPAS"></span></p>
+            <p><strong>DOA de la catégorie type :</strong> <span id="doaCategorie"></span></p>
+            <p><strong>DOA moyen par AS :</strong> <span id="doaMoyen"></span></p>
+            <p><strong>Situation CPAS :</strong> <span id="etatEffectif"></span></p>
+
+            <button type="button" onclick="calculerETP()">Calculer le besoin en ETP</button>
+
+            <button class="accordion" onclick="toggleAccordion()">Détails des calculs</button>
+            <div id="details" class="panel"></div>
+        </div>
+    </div>
+
+    <script>
+        const ETP_VALUES = {
+            'petit': {
+                'encodage': 0.05,
+                'etudiants': 0.2,
+                'debiteurs': 0.0,
+                'contacts': 0.0,
+                'adresses': 0.0,
+                'logement': 0.5,
+                'ila': 0.25,
+                'mediation': 0.01,
+                'insertion': 0.5,
+                'ins_sociale': 0.25,
+                'impot': 0.02,
+                'energie': 0.25,
+                'projets_jeunes': 0.25,
+                'projets_culture': 0.25,
+                'deliberations': 0.05,
+                'courrier': 0.08,
+                'gestion': 0.25,
+                'guidance': 0.25,
+                'piis': 0.1,
+                'handicap': 0.05
+            },
+            'moyen': {
+                'encodage': 0.05,
+                'etudiants': 0.5,
+                'debiteurs': 0.0,
+                'contacts': 0.1,
+                'adresses': 0.1,
+                'logement': 0.75,
+                'ila': 0.25,
+                'mediation': 0.025,
+                'insertion': 1,
+                'ins_sociale': 0.6,
+                'impot': 0.02,
+                'energie': 0.5,
+                'projets_jeunes': 0.5,
+                'projets_culture': 0.5,
+                'deliberations': 0.05,
+                'courrier': 0.8,
+                'gestion': 0.5,
+                'guidance': 0.5,
+                'piis': 0.2,
+                'handicap': 0.1
+            },
+            'grand': {
+                'encodage': 0.05,
+                'etudiants': 2,
+                'debiteurs': 0.2,
+                'contacts': 0.2,
+                'adresses': 0.2,
+                'logement': 1,
+                'ila': 0.75,
+                'mediation': 1,
+                'insertion': 2,
+                'ins_sociale': 1.5,
+                'impot': 0.02,
+                'energie': 1,
+                'projets_jeunes': 1,
+                'projets_culture': 1,
+                'deliberations': 0.05,
+                'courrier': 0.08,
+                'gestion': 1,
+                'guidance': 1,
+                'piis': 1,
+                'handicap': 0.4
+                 }
+        };
+
+        function toggleLogementInput() {
+            const logementInput = document.getElementById('logementInput');
+            logementInput.style.display = logementInput.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleILAInput() {
+            const ilaInput = document.getElementById('ilaInput');
+            ilaInput.style.display = ilaInput.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleAccordion() {
+            const panel = document.getElementById('details');
+            panel.classList.toggle('active');
+        }
+function calculerETP() {
+    const habitants = parseInt(document.getElementById('habitants').value);
+    const dossiersRI = parseInt(document.getElementById('dossiersRI').value);
+    const dossiersERI = parseInt(document.getElementById('dossiersERI').value);
+    const nbAS = parseInt(document.getElementById('nbAS').value);
+
+    if (isNaN(habitants) || isNaN(dossiersRI) || isNaN(dossiersERI) || isNaN(nbAS) || nbAS <= 0) {
+        alert("Veuillez remplir toutes les valeurs correctement.");
+        return;
+    }
+
+    // Déterminer la catégorie du CPAS
+    let categorie;
+    let doaCategorieType;
+    if (habitants <= 10000) {
+        categorie = 'petit';
+        doaCategorieType = 29;
+    } else if (habitants <= 25000) {
+        categorie = 'moyen';
+        doaCategorieType = 69;
+    } else {
+        categorie = 'grand';
+        doaCategorieType = 142;
+    }
+
+    const totalDossiers = dossiersRI + dossiersERI;
+    const DOA_par_AS = totalDossiers / nbAS;
+
+    // Afficher le type de CPAS et le DOA de la catégorie type
+    document.getElementById('typeCPAS').innerText = categorie.charAt(0).toUpperCase() + categorie.slice(1);
+    document.getElementById('doaCategorie').innerText = doaCategorieType;
+
+    // Calcul des retraits pour les services de base non proposés (par DOA par AS)
+    let retraitTotal = 0;
+    let detailsRetrait = `Catégorie du CPAS : ${categorie}<br>Détails des retraits :<br>`;
+    document.querySelectorAll('.serviceBase:checked').forEach(service => {
+        const serviceType = service.getAttribute('data-service');
+        const etpValue = ETP_VALUES[categorie][serviceType] || 0;
+        const impactRetrait = etpValue * DOA_par_AS; // Multiplier par le DOA par AS
+        retraitTotal += impactRetrait;
+        detailsRetrait += `- Service: ${serviceType}, ETP de la catégorie: ${etpValue.toFixed(2)}, Impact sur DOA: -${impactRetrait.toFixed(2)}<br>`;
+    });
+
+    // Calcul des ajouts pour les services complémentaires proposés (par DOA par AS)
+    let ajoutTotal = 0;
+    let detailsAjout = `Détails des ajouts :<br>`;
+    document.querySelectorAll('.serviceComplementaire:checked').forEach(service => {
+        const serviceType = service.getAttribute('data-service');
+        let etpValue = ETP_VALUES[categorie][serviceType] || 0;
+
+        // Vérification spécifique pour logement
+        if (serviceType === 'logement') {
+            const logements = parseInt(document.getElementById('logementInput').value) || 0;
+            if (logements > 20) etpValue = 2;
+            else if (logements > 10) etpValue = 1;
+            else if (logements > 0) etpValue = 0.5;
+        }
+
+        // Vérification spécifique pour ILA
+        if (serviceType === 'ila') {
+            const personnesILA = parseInt(document.getElementById('ilaInput').value) || 0;
+            if (personnesILA > 22) etpValue = 2;
+            else if (personnesILA > 15) etpValue = 1;
+            else if (personnesILA > 10) etpValue = 0.5;
+            else if (personnesILA > 0) etpValue = 0.25;
+        }
+
+        const impactAjout = etpValue * DOA_par_AS; // Multiplier par le DOA par AS
+        ajoutTotal += impactAjout;
+        detailsAjout += `- Service: ${serviceType}, ETP de la catégorie: ${etpValue.toFixed(2)}, Impact sur DOA: +${impactAjout.toFixed(2)}<br>`;
+    });
+
+    // Calcul du DOA total ajusté
+    const DOA_total = totalDossiers - retraitTotal + ajoutTotal;
+    const DOA_par_AS_final = DOA_total / nbAS;
+
+    // Affichage des résultats
+    document.getElementById('doaMoyen').innerText = DOA_par_AS_final.toFixed(2);
+    const etatEffectif = DOA_par_AS_final > doaCategorieType ? "Nombre de dossiers traités supérieur à la moyenne" : "Nombre de dossiers traités inférieur à la moyenne";
+    document.getElementById('etatEffectif').innerText = etatEffectif;
+
+    // Affichage des détails complets des calculs
+    let detailsCalculs = `<h4>Résumé des calculs :</h4>`;
+    detailsCalculs += `Total des dossiers initial : ${totalDossiers}<br>`;
+    detailsCalculs += `Total des retraits (DOA) : -${retraitTotal.toFixed(2)}<br>`;
+    detailsCalculs += `Total des ajouts (DOA) : +${ajoutTotal.toFixed(2)}<br>`;
+    detailsCalculs += `DOA total après ajustements : ${DOA_total.toFixed(2)}<br>`;
+    detailsCalculs += `DOA ajusté par AS : ${DOA_par_AS_final.toFixed(2)}`;
+
+    document.getElementById('details').innerHTML = detailsRetrait + detailsAjout + detailsCalculs;
+}
+    </script>
+</body>
+</html>
